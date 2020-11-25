@@ -14,10 +14,6 @@
 
 
 
-
-
-
-
 int main() {
     float h = 30/nx;      //h=L/nx=20/40
     float dt = 30/(nx*nx);
@@ -52,4 +48,3 @@ int main() {
         
     return 0;
 }
-bite 
