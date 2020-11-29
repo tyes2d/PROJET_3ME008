@@ -73,7 +73,7 @@ int main(){
     
     printf("Au bout de combien de temps la plaque doit-elle etre retirée de l'eau (en seconde)? \n");
     scanf("%d", &Ts);
-    Creation_B(B, b, h, dt);
+    Creation_Bb(B, b, h, dt);
     solution_numerique(B, b, h, dt, Ti, Tf, Ts, T);
     printf("vect T : \n\n");    //affichage de T à Ts
     for (int i=0; i<NX; i++){
