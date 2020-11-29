@@ -14,7 +14,8 @@
 
 
 //Question 1
-void Creation_B(float B[NX][NX], float b[NX], float h, float dt) {
+//permet de generer la matrice B
+void Creation_Bb(float B[NX][NX], float b[NX], float h, float dt) {
     b[0]=dt/(h*h);
     for (int i=1; i<NX; i++) b[i]=0;
     for (int i=0; i<NX; i++){           //on initialise B, on lui met une valeur par défaut de 0.0
@@ -44,6 +45,7 @@ void Creation_B(float B[NX][NX], float b[NX], float h, float dt) {
         
 }
 //Question 2/3
+//Permet de calculer numériquement le profil de temperature dans la plaque au bout d'un temps donné Tstop
 void solution_numerique(float B[NX][NX], float b[NX], float h, float dt, float Tinitiale, float Tfinale, int Tstop, float T[NX]){
     float res=0.0;
     for (int i=1; i<NX-1; i++) T[i]=Tinitiale;
@@ -77,6 +79,4 @@ int main(){
     for (int i=0; i<NX; i++){
         printf(" %f \n", T[i]);
     }
-    
-    
 }
