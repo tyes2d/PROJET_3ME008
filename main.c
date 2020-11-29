@@ -43,7 +43,7 @@ void Creation_B(float B[NX][NX], float b[NX], float h, float dt) {
     }
         
 }
-
+//Question 2/3
 void solution_numerique(float B[NX][NX], float b[NX], float h, float dt, float Tinitiale, float Tfinale, int Tstop, float T[NX]){
     float res=0.0;
     for (int i=1; i<NX-1; i++) T[i]=Tinitiale;
