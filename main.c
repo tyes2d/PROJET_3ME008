@@ -2,7 +2,7 @@
 //  main.c
 //  PROJET_3ME008
 //
-//  Created by Gauthier LECLERCQ & Victor DAUBE on 17/11/2020.
+//  Created by Gauthier LECLERCQ on 17/11/2020.
 //  Copyright © 2020 Gauthier LECLERCQ. All rights reserved.
 //
 
@@ -59,6 +59,51 @@ void solution_numerique(float B[NX][NX], float b[NX], float h, float dt, float T
         }
     }
 }
+
+//Question 4 : Calcul de la rapidité de convergence
+void rapidite_conv(float B[NX][NX], float b[NX], float h, float dt){
+    //nous allons nous aider de la
+}
+/*float puissance_it( float A[MAX][MAX], float x0[MAX] , float x[MAX],float eps  , int n) {
+    
+    int i,j,k=0;
+    float v[MAX], L1=1,L0=10000000, r, var ;
+    
+    
+    for (i=0;i<n;i++) x[i] = x0[i];
+    r = norme2_vect(x,n);
+    for (i=0;i<n;i++) x[i] = x[i]/r;
+    
+    while ((L1 - L0) >= eps || (L1-L0) <= -eps ) {
+        
+        L0 = L1;
+
+        for (i=0;i<n;i++) {
+            var =0;
+            for (j=0;j<n;j++) var+= A[i][j]*x[j];
+            v[i] = var;
+        }
+                
+
+        L1=0;
+        for (i=0;i<n;i++) L1 +=    x[i]*v[i];
+        
+
+                
+          for (i=0;i<n;i++) x[i] = v[i];
+                
+        r = norme2_vect(x,n);
+        for (i=0;i<n;i++) x[i] = x[i]/r;
+    
+        k ++;
+    }
+            
+    printf("%d itérations\n",k);
+
+    return L1;
+    
+}*/
+
 
 int main(){
     float h = 30/nx;      //h=L/nx=20/40
