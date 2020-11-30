@@ -2,7 +2,7 @@
 //  main.c
 //  PROJET_3ME008
 //
-//  Created by Gauthier LECLERCQ on 17/11/2020.
+//  Created by Gauthier LECLERCQ & Victor DAUBE on 17/11/2020.
 //  Copyright © 2020 Gauthier LECLERCQ. All rights reserved.
 //
 
