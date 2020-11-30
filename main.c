@@ -63,8 +63,9 @@ void solution_numerique(float B[NX][NX], float b[NX], float h, float dt, float T
 int main(){
     float h = 30/nx;      //h=L/nx=20/40
     float dt = 30/(nx*nx);
-    float B[NX][NX];
-    float b[NX];
+    float dtprime=30/(5*nx*nx);
+    float B[NX][NX], Bprime[NX][NX];
+    float b[NX], bprime[NX];
     float Ti=750;
     float Tf=25;
     int Ts;
@@ -74,8 +75,14 @@ int main(){
     printf("Au bout de combien de temps la plaque doit-elle etre retirée de l'eau (en seconde)? \n");
     scanf("%d", &Ts);
     Creation_Bb(B, b, h, dt);
+    Creation_Bb(Bprime, bprime, h, dtprime);
     solution_numerique(B, b, h, dt, Ti, Tf, Ts, T);
     printf("vect T : \n\n");    //affichage de T à Ts
+    for (int i=0; i<NX; i++){
+        printf(" %f \n", T[i]);
+    }
+    solution_numerique(Bprime, bprime, h, dtprime, Ti, Tf, Ts, T);
+    printf("vect Tprime : \n\n");    //affichage de T à Ts
     for (int i=0; i<NX; i++){
         printf(" %f \n", T[i]);
     }
