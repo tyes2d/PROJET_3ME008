@@ -13,6 +13,14 @@
 #define nx 40.0
 
 
+
+float norme_vect(float x[NX]) { //renvoie la norme d'un vecteur (tableau à 1 entrée)
+    float var=0;
+    int i;
+    for (i=0;i<NX;i++) var += (x[i]*x[i]);
+    return sqrt(var);
+}
+
 //Question 1
 //permet de generer la matrice B
 void Creation_Bb(float B[NX][NX], float b[NX], float h, float dt) {
@@ -31,7 +39,7 @@ void Creation_Bb(float B[NX][NX], float b[NX], float h, float dt) {
             else B[i][j] = 0;
         }
     }
-    printf("mat B : \n\n");     //affichage de B
+    /*printf("\nmat B : \n\n");     //affichage de B
     for (int i=0; i<NX; i++){
         for (int j=0; j<NX; j++){
             printf(" %f ", B[i][j]);
@@ -41,7 +49,7 @@ void Creation_Bb(float B[NX][NX], float b[NX], float h, float dt) {
     printf("vect b : \n\n");    //affichage de b
     for (int i=0; i<NX; i++){
         printf(" %f \n", b[i]);
-    }
+    }*/
         
 }
 //Question 2/3
@@ -64,6 +72,8 @@ void solution_numerique(float B[NX][NX], float b[NX], float h, float dt, float T
 void rapidite_conv(float B[NX][NX], float b[NX], float h, float dt){
     //nous allons nous aider de la
 }
+
+
 /*float puissance_it( float A[MAX][MAX], float x0[MAX] , float x[MAX],float eps  , int n) {
     
     int i,j,k=0;
@@ -106,29 +116,46 @@ void rapidite_conv(float B[NX][NX], float b[NX], float h, float dt){
 
 
 int main(){
-    float h = 30/nx;      //h=L/nx=20/40
-    float dt = 30/(nx*nx);
+    double a=0;
+    double h = 30/nx;      //h=L/nx=20/40
+    double dt = 30/(nx*nx);
     float dtprime=30/(5*nx*nx);
-    float B[NX][NX], Bprime[NX][NX];
-    float b[NX], bprime[NX];
-    float Ti=750;
-    float Tf=25;
-    int Ts;
-    float T[NX];
+    float dtQ5 ;
+    float errT = 40; // on choisit  ici car une erreur de  degrés sur un centaine nous semble correct
+    float normT=100;
+    float B[NX][NX], Bprime[NX][NX], BQ5[NX][NX];
+    float b[NX], bprime[NX], bQ5[NX];
+    float Ti=750, Tf=25;
+    int ts;
+    float T[NX], Tprime[NX], TQ5[NX], deltaT[NX];
     for (int i=0; i<NX; i++) T[i]=0;
     
     printf("Au bout de combien de temps la plaque doit-elle etre retirée de l'eau (en seconde)? \n");
-    scanf("%d", &Ts);
+    scanf("%d", &ts);
     Creation_Bb(B, b, h, dt);
     Creation_Bb(Bprime, bprime, h, dtprime);
-    solution_numerique(B, b, h, dt, Ti, Tf, Ts, T);
+    solution_numerique(B, b, h, dt, Ti, Tf, ts, T);
     printf("vect T : \n\n");    //affichage de T à Ts
     for (int i=0; i<NX; i++){
         printf(" %f \n", T[i]);
     }
-    solution_numerique(Bprime, bprime, h, dtprime, Ti, Tf, Ts, T);
+    solution_numerique(Bprime, bprime, h, dtprime, Ti, Tf, ts, Tprime);
     printf("vect Tprime : \n\n");    //affichage de T à Ts
     for (int i=0; i<NX; i++){
         printf(" %f \n", T[i]);
     }
+    
+    //Question 5
+    
+    dtQ5=dtprime;
+    while (normT>errT){
+        Creation_Bb(BQ5, bQ5, h, dtQ5);
+        solution_numerique(BQ5, bQ5, h, dtQ5, Ti, Tf, ts, TQ5);
+        for (int i=0; i<NX; i++) deltaT[i]=fabs(T[i]-TQ5[i]);
+        normT = norme_vect(deltaT);
+        dtQ5=dtQ5/5;
+        a++;
+    }
+    printf("dt optimal : %f\n", dtQ5);
 }
+
