@@ -14,8 +14,8 @@
 
 
 
-float norme_vect(float x[NX]) { //renvoie la norme d'un vecteur (tableau à 1 entrée)
-    float var=0;
+double norme_vect(double x[NX]) { //renvoie la norme d'un vecteur (tableau à 1 entrée)
+    double var=0;
     int i;
     for (i=0;i<NX;i++) var += (x[i]*x[i]);
     return sqrt(var);
@@ -23,7 +23,7 @@ float norme_vect(float x[NX]) { //renvoie la norme d'un vecteur (tableau à 1 en
 
 //Question 1
 //permet de generer la matrice B
-void Creation_Bb(float B[NX][NX], float b[NX], float h, float dt) {
+void Creation_Bb(double B[NX][NX], double b[NX], double h, double dt) {
     b[0]=dt/(h*h);
     for (int i=1; i<NX; i++) b[i]=0;
     for (int i=0; i<NX; i++){           //on initialise B, on lui met une valeur par défaut de 0.0
@@ -42,20 +42,20 @@ void Creation_Bb(float B[NX][NX], float b[NX], float h, float dt) {
     /*printf("\nmat B : \n\n");     //affichage de B
     for (int i=0; i<NX; i++){
         for (int j=0; j<NX; j++){
-            printf(" %f ", B[i][j]);
+            printf(" %lf ", B[i][j]);
         }
         printf("\n");
     }
     printf("vect b : \n\n");    //affichage de b
     for (int i=0; i<NX; i++){
-        printf(" %f \n", b[i]);
+        printf(" %lf \n", b[i]);
     }*/
         
 }
 //Question 2/3
 //Permet de calculer numériquement le profil de temperature dans la plaque au bout d'un temps donné Tstop
-void solution_numerique(float B[NX][NX], float b[NX], float h, float dt, float Tinitiale, float Tfinale, int Tstop, float T[NX]){
-    float res=0.0;
+void solution_numerique(double B[NX][NX], double b[NX], double h, double dt, double Tinitiale, double Tfinale, int Tstop, double T[NX]){
+    double res=0.0;
     for (int i=1; i<NX-1; i++) T[i]=Tinitiale;
     T[0]=Tfinale;
     T[NX-1]=Tfinale;
@@ -69,15 +69,15 @@ void solution_numerique(float B[NX][NX], float b[NX], float h, float dt, float T
 }
 
 //Question 4 : Calcul de la rapidité de convergence
-void rapidite_conv(float B[NX][NX], float b[NX], float h, float dt){
+void rapidite_conv(double B[NX][NX], double b[NX], double h, double dt){
     //nous allons nous aider de la
 }
 
 
-/*float puissance_it( float A[MAX][MAX], float x0[MAX] , float x[MAX],float eps  , int n) {
+/*double puissance_it( double A[MAX][MAX], double x0[MAX] , double x[MAX],double eps  , int n) {
     
     int i,j,k=0;
-    float v[MAX], L1=1,L0=10000000, r, var ;
+    double v[MAX], L1=1,L0=10000000, r, var ;
     
     
     for (i=0;i<n;i++) x[i] = x0[i];
@@ -119,15 +119,15 @@ int main(){
     double a=0;
     double h = 30/nx;      //h=L/nx=20/40
     double dt = 30/(nx*nx);
-    float dtprime=30/(5*nx*nx);
-    float dtQ5 ;
-    float errT = 40; // on choisit  ici car une erreur de  degrés sur un centaine nous semble correct
-    float normT=100;
-    float B[NX][NX], Bprime[NX][NX], BQ5[NX][NX];
-    float b[NX], bprime[NX], bQ5[NX];
-    float Ti=750, Tf=25;
+    double dtprime=30/(5*nx*nx);
+    double dtQ5 ;
+    double errT = 40; // on choisit  ici car une erreur de  degrés sur un centaine nous semble correct
+    double normT=100;
+    double B[NX][NX], Bprime[NX][NX], BQ5[NX][NX];
+    double b[NX], bprime[NX], bQ5[NX];
+    double Ti=750, Tf=25;
     int ts;
-    float T[NX], Tprime[NX], TQ5[NX], deltaT[NX];
+    double T[NX], Tprime[NX], TQ5[NX], deltaT[NX];
     for (int i=0; i<NX; i++) T[i]=0;
     
     printf("Au bout de combien de temps la plaque doit-elle etre retirée de l'eau (en seconde)? \n");
@@ -137,12 +137,12 @@ int main(){
     solution_numerique(B, b, h, dt, Ti, Tf, ts, T);
     printf("vect T : \n\n");    //affichage de T à Ts
     for (int i=0; i<NX; i++){
-        printf(" %f \n", T[i]);
+        printf(" %lf \n", T[i]);
     }
     solution_numerique(Bprime, bprime, h, dtprime, Ti, Tf, ts, Tprime);
     printf("vect Tprime : \n\n");    //affichage de T à Ts
     for (int i=0; i<NX; i++){
-        printf(" %f \n", T[i]);
+        printf(" %lf \n", T[i]);
     }
     
     //Question 5
@@ -156,6 +156,5 @@ int main(){
         dtQ5=dtQ5/5;
         a++;
     }
-    printf("dt optimal : %f\n", dtQ5);
+    printf("dt optimal : %lf\n", dtQ5);
 }
-
