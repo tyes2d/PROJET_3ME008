@@ -81,13 +81,13 @@ int main(){
     double dt = 30/(nx*nx);
     double dtprime=30/(5*nx*nx);
     double dtQ5 ;
-    double errT = 0.1; // on choisit  ici car une erreur de  degrés sur un centaine nous semble correct
+    double errT = 1; // on choisit  ici car une erreur de  degrés sur un centaine nous semble correct
     double normT=100;
     double B[NX][NX], Bprime[NX][NX], BQ5[NX][NX];
     double b[NX], bprime[NX], bQ5[NX];
     double Ti=750, Tf=25;
     int ts;
-    double T[NX], Tprime[NX], TQ5[NX], deltaT[NX];
+    double T[NX], Tprime[NX], TQ5[NX], TQ[NX], deltaT[NX];
     for (int i=0; i<NX; i++) T[i]=0;
     
     printf("Au bout de combien de temps la plaque doit-elle etre retirée de l'eau (en seconde)? \n");
@@ -102,7 +102,7 @@ int main(){
     solution_numerique(Bprime, bprime, dx, dtprime, Ti, Tf, ts, Tprime);
     printf("vect Tprime : \n\n");    //affichage de T à Ts
     for (int i=0; i<NX; i++){
-        printf(" %lf \n", T[i]);
+        printf(" %lf \n", Tprime[i]);
     }
     
     //Question 5
@@ -111,7 +111,8 @@ int main(){
     do {
         Creation_Bb(BQ5, bQ5, dx, dtQ5, a);
         solution_numerique(BQ5, bQ5, dx, dtQ5, Ti, Tf, ts, TQ5);
-        for (int i=0; i<NX; i++) deltaT[i]=fabs(T[i]-TQ5[i]);
+        for (int i=0; i<NX; i++) deltaT[i]=fabs(TQ[i]-TQ5[i]);
+        for (int i=0; i<NX; i++) TQ[i]=TQ5[i];
         normT = norme_vect(deltaT);
         dtQ5=dtQ5/5;
         z++;
