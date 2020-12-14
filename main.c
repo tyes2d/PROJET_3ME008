@@ -1,11 +1,3 @@
-//
-//  main.c
-//  PROJET_3ME008
-//
-//  Created by Gautdxier LECLERCQ on 17/11/2020.
-//  Copyrigdxt © 2020 Gautdxier LECLERCQ. All rigdxts reserved.
-//
-
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
@@ -23,8 +15,9 @@ double norme_vect(double x[NX]) { //renvoie la norme d'un vecteur (tableau à 1 
 //Question 1
 //permet de generer la matrice B
 void Creation_Bb(double B[NX][NX], double b[NX], double dx, double dt, double a) {
-    b[0]=a*dt/(dx*dx);
-    for (int i=1; i<NX; i++) b[i]=0;
+    b[0]=25*a*dt/(dx*dx);               //ici T_0=25°C et T_L=25°C
+    b[NX-1]=25*a*dt/(dx*dx);
+    for (int i=1; i<NX-1; i++) b[i]=0;
     for (int i=0; i<NX; i++){           //on initialise B, on lui met une valeur par défaut de 0.0
         for (int j=0; j<NX; j++){
             B[i][j]=0.0;
@@ -38,7 +31,7 @@ void Creation_Bb(double B[NX][NX], double b[NX], double dx, double dt, double a)
             else B[i][j] = 0;
         }
     }
-    /*printf("\nmat B : \n\n");     //affichage de B
+    printf("\nmat B : \n\n");     //affichage de B
     for (int i=0; i<NX; i++){
         for (int j=0; j<NX; j++){
             printf(" %lf ", B[i][j]);
@@ -48,12 +41,12 @@ void Creation_Bb(double B[NX][NX], double b[NX], double dx, double dt, double a)
     printf("vect b : \n\n");    //affichage de b
     for (int i=0; i<NX; i++){
         printf(" %lf \n", b[i]);
-    }*/
+    }
         
 }
 //Question 2/3
 //Permet de calculer numériquement le profil de temperature dans la plaque au bout d'un temps donné Tstop
-void solution_numerique(double B[NX][NX], double b[NX], double dx, double dt, double Tinitiale, double Tfinale, int Tstop, double T[NX]){
+void solution_numeriqueEXPLI(double B[NX][NX], double b[NX], double dx, double dt, double Tinitiale, double Tfinale, int Tstop, double T[NX]){
     double res=0.0;
     for (int i=1; i<NX-1; i++) T[i]=Tinitiale;
     T[0]=Tfinale;
@@ -72,34 +65,135 @@ void rapidite_conv(double B[NX][NX], double b[NX], double dx, double dt){
     //nous allons nous aider de la
 }
 
+//-------------PARTIE 2------------------
+
+//Question 6
+void Creation_Cc(double C[NX][NX], double c[NX], double dx, double dt, double a) {
+    c[0]=25*a*dt/(dx*dx);
+    c[NX-1]=25*a*dt/(dx*dx);
+       for (int i=1; i<NX-1; i++) c[i]=0;
+       for (int i=0; i<NX; i++){           //on initialise B, on lui met une valeur par défaut de 0.0
+           for (int j=0; j<NX; j++){
+               C[i][j]=0.0;
+           }
+       }
+       for (int i=0; i<NX; i++){
+           for (int j=0; j<NX; j++){
+               if (i==j) C[i][j] = 1+2*a*dt/(dx*dx);
+               else if (j==i+1 || j==i-1) C[i][j] = -a*dt/(dx*dx);
+               else C[i][j] = 0;
+           }
+       }
+       /*printf("\nmat C : \n\n");     //affichage de C
+       for (int i=0; i<NX; i++){
+           for (int j=0; j<NX; j++){
+               printf(" %lf ", C[i][j]);
+           }
+           printf("\n");
+       }
+       printf("vect c : \n\n");    //affichage de c
+       for (int i=0; i<NX; i++){
+           printf(" %lf \n", c[i]);
+       }*/
+}
+//Question 7
+
+void facto_LU( double C[NX][NX] , double L[NX][NX] , double U[NX][NX]) {
+    int i,j,k;
+    float l;
+    for (j=0;j<NX;j++) {
+        for (i=0;i<=j;i++) {
+            l=0;
+            for (k=0;k<i;k++) l += L[i][k]*U[k][j];
+            U[i][j] = C[i][j] - l;
+        }
+        L[j][j] = 1;
+        for (i=j+1;i<NX;i++) {
+            l=0;
+            for (k=0;k<=j-1;k++) l += L[i][k]*U[k][j];
+            L[i][j] = (C[i][j] - l)/U[j][j];
+        }
+                
+    }
+    printf("\nmat L : \n\n");     //affichage de C
+    for (int i=0; i<NX; i++){
+        for (int j=0; j<NX; j++){
+            printf(" %lf ", L[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\nmat U : \n\n");     //affichage de C
+       for (int i=0; i<NX; i++){
+           for (int j=0; j<NX; j++){
+               printf(" %lf ", U[i][j]);
+           }
+           printf("\n");
+       }
+}
+
+
+
+void resol_trig_inf( double A[NX][NX] , double x[NX], double b[NX]) {
+    int i;
+    float l;
+    
+    for (i=0;i<NX;i++) {
+        l=0;
+        for (int k=0;k<=i-1;k++) l += A[i][k]*x[k];
+        x[i] = (b[i] -l)/A[i][i];
+    }
+}
+
+
+void resol_trig_sup( double A[NX][NX] , double x[NX], double b[NX]) {
+    int i;
+    float l;
+    
+    for (i=NX;i>=0;i--) { //ici peut etre pb sur i=NX ou =NX-1
+        l=0;
+        for (int k=i+1;k<NX;k++) l += A[i][k]*x[k];
+        x[i] = (b[i]-l)/A[i][i];
+    }
+}
+
+void solution_numeriqueIMPLI(double C[NX][NX], double c[NX], double dx, double dt, double Tinitiale, double Tfinale, int Tstop, double T[NX]){
+    double res=0.0;
+    double vect[NX];
+    double L[NX][NX], U[NX][NX];
+    for (int i=1; i<NX-1; i++) T[i]=Tinitiale;
+    T[0]=Tfinale;
+    T[NX-1]=Tfinale;
+    facto_LU(C, L, U);
+    
+}
 
 
 int main(){
     double z=0;
-    double a=0.00001;
-    double dx = 0.03/nx;      //dx=L/nx=20/40
-    double dt = 30/(nx*nx);
-    double dtprime=30/(5*nx*nx);
+    double a=0.00001;                   //Diffusivité du materiaux
+    double dx = 0.03/nx;                //dx=L/nx=20/40
+    double dt = 30/(nx*nx);             //Pas de temps
+    double dtprime=30/(5*nx*nx);        //Pas de temps plus fin de la question 4
     double dtQ5 ;
-    double errT = 1; // on choisit  ici car une erreur de  degrés sur un centaine nous semble correct
+    double errT = 1;                    // on choisit 1 ici, un choix qui nous semble cohérent avec l'ordre de grandeur des températures en jeu
     double normT=100;
-    double B[NX][NX], Bprime[NX][NX], BQ5[NX][NX];
-    double b[NX], bprime[NX], bQ5[NX];
-    double Ti=750, Tf=25;
+    double B[NX][NX], Bprime[NX][NX], BQ5[NX][NX], C[NX][NX], L[NX][NX], U[NX][NX];
+    double b[NX], bprime[NX], bQ5[NX], c[NX];
+    double Ti=750, Tf=25;               //Condition initiale et finale
     int ts;
     double T[NX], Tprime[NX], TQ5[NX], TQ[NX], deltaT[NX];
     for (int i=0; i<NX; i++) T[i]=0;
     
-    printf("Au bout de combien de temps la plaque doit-elle etre retirée de l'eau (en seconde)? \n");
-    scanf("%d", &ts);
+    printf("Au bout de combien de temps la plaque doit-elle etre retirée de l'eau (en seconde, uniquement nombre entier)? \n"); //
+    scanf("%d", &ts);                                                                                                           // PEUT ETRE LE MERTTRE DIRECT DANS LES FONCTIONS de  RESOLUTION ??
     Creation_Bb(B, b, dx, dt, a);
     Creation_Bb(Bprime, bprime, dx, dtprime, a);
-    solution_numerique(B, b, dx, dt, Ti, Tf, ts, T);
+    solution_numeriqueEXPLI(B, b, dx, dt, Ti, Tf, ts, T);
     printf("vect T : \n\n");    //affichage de T à Ts
     for (int i=0; i<NX; i++){
         printf(" %lf \n", T[i]);
     }
-    solution_numerique(Bprime, bprime, dx, dtprime, Ti, Tf, ts, Tprime);
+    solution_numeriqueEXPLI(Bprime, bprime, dx, dtprime, Ti, Tf, ts, Tprime);
     printf("vect Tprime : \n\n");    //affichage de T à Ts
     for (int i=0; i<NX; i++){
         printf(" %lf \n", Tprime[i]);
@@ -108,9 +202,10 @@ int main(){
     //Question 5
     
     dtQ5=dtprime;
+    for (int i=0; i<NX; i++) TQ[i]=0;
     do {
         Creation_Bb(BQ5, bQ5, dx, dtQ5, a);
-        solution_numerique(BQ5, bQ5, dx, dtQ5, Ti, Tf, ts, TQ5);
+        solution_numeriqueEXPLI(BQ5, bQ5, dx, dtQ5, Ti, Tf, ts, TQ5);
         for (int i=0; i<NX; i++) deltaT[i]=fabs(TQ[i]-TQ5[i]);
         for (int i=0; i<NX; i++) TQ[i]=TQ5[i];
         normT = norme_vect(deltaT);
@@ -119,4 +214,10 @@ int main(){
     }
     while (normT>errT);
     printf("dt optimal : %lf\n", dtQ5);
+    Creation_Cc(C, c, dx, dtQ5, a);
+    
+    //Question 7
+    
+    
+    
 }
