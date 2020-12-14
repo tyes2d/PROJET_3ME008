@@ -60,11 +60,6 @@ void solution_numeriqueEXPLI(double B[NX][NX], double b[NX], double dx, double d
     }
 }
 
-//Question 4 : Calcul de la rapidité de convergence
-void rapidite_conv(double B[NX][NX], double b[NX], double dx, double dt){
-    //nous allons nous aider de la
-}
-
 //-------------PARTIE 2------------------
 
 //Question 6
