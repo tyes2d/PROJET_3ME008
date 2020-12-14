@@ -48,11 +48,9 @@ void Creation_Bb(double B[NX][NX], double b[NX], double dx, double dt, double a)
 //Permet de calculer numériquement le profil de temperature dans la plaque au bout d'un temps donné Tstop
 void solution_numeriqueEXPLI(double B[NX][NX], double b[NX], double dx, double dt, double Tinitiale, double Tfinale, int Tstop, double T[NX]){
     double res=0.0;
-    for (int i=1; i<NX-1; i++) T[i]=Tinitiale;
-    T[0]=Tfinale;
-    T[NX-1]=Tfinale;
+    for (int i=0; i<NX; i++) T[i]=Tinitiale;
     for (int n=0; n*dt<Tstop; n++){ // n=Tstop/dt : nombre d'échantillon temporels sur lesquels il faut trouver T jusqu'au temps Tstop
-        for (int i=1; i<NX-1;i++){  //On applique ici la formule T^n+1 = [B]*T^n + [b]
+        for (int i=0; i<NX;i++){  //On applique ici la formule T^n+1 = [B]*T^n + [b]
             res=0.0;
             for (int j=0; j<NX;j++) res += B[i][j]*T[j];
             T[i] = res+b[i];
@@ -155,9 +153,7 @@ void solution_numeriqueIMPLI(double C[NX][NX], double c[NX], double dx, double d
     double vect[NX];
     double y[NX];
     double L[NX][NX], U[NX][NX];
-    T[0]=Tfinale;
-    T[NX-1]=Tfinale;
-    for (int i=1; i<NX-1; i++) T[i]=Tinitiale;
+    for (int i=0; i<NX; i++) T[i]=Tinitiale;
     facto_LU(C, L, U);
     for (int n=0; n*dt<Tstop; n++){ //On applique ici la formule [C]T^n+1 = T^n + [c]
         for (int i=0; i<NX; i++) vect[i]=T[i]+c[i];
@@ -170,9 +166,9 @@ void solution_numeriqueIMPLI(double C[NX][NX], double c[NX], double dx, double d
 int main(){
     double z=0;
     double a=0.00001;                   //Diffusivité du materiaux
-    double dx = 0.03/nx;                //dx=L/nx=20/40
+    double dx = 0.03/nx;                //dx=L/nx=0.03/40
     double dt = 30/(nx*nx);             //Pas de temps
-    double dtprime=30/(5*nx*nx);        //Pas de temps plus fin de la question 4
+    double dtprime=30/(5*nx*nx);        //Pas de temps pour la fin de la question 4
     double dtQ5 ;
     double errT = 1;                    // on choisit 1 ici, un choix qui nous semble cohérent avec l'ordre de grandeur des températures en jeu
     double normT=100;
@@ -183,8 +179,8 @@ int main(){
     double T[NX], Tprime[NX], TQ5[NX], TQ[NX], deltaT[NX];
     for (int i=0; i<NX; i++) T[i]=0;
     
-    printf("Au bout de combien de temps la plaque doit-elle etre retirée de l'eau (en seconde, uniquement nombre entier)? \n"); //
-    scanf("%d", &ts);                                                                                                           // PEUT ETRE LE MERTTRE DIRECT DANS LES FONCTIONS de  RESOLUTION ??
+    printf("Au bout de combien de temps la plaque doit-elle etre retirée de l'eau (en seconde, uniquement nombre entier)? \n");
+    scanf("%d", &ts);
     Creation_Bb(B, b, dx, dt, a);
     Creation_Bb(Bprime, bprime, dx, dtprime, a);
     solution_numeriqueEXPLI(B, b, dx, dt, Ti, Tf, ts, T);
@@ -209,7 +205,6 @@ int main(){
         for (int i=0; i<NX; i++) TQ[i]=TQ5[i];
         normT = norme_vect(deltaT);
         dtQ5=dtQ5/5;
-        z++;
     }
     while (normT>errT);
     printf("dt optimal : %lf\n", dtQ5);
