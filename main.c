@@ -31,7 +31,7 @@ void Creation_Bb(double B[NX][NX], double b[NX], double dx, double dt, double a)
             else B[i][j] = 0;
         }
     }
-    printf("\nmat B : \n\n");     //affichage de B
+    /*printf("\nmat B : \n\n");     //affichage de B
     for (int i=0; i<NX; i++){
         for (int j=0; j<NX; j++){
             printf(" %lf ", B[i][j]);
@@ -41,7 +41,7 @@ void Creation_Bb(double B[NX][NX], double b[NX], double dx, double dt, double a)
     printf("vect b : \n\n");    //affichage de b
     for (int i=0; i<NX; i++){
         printf(" %lf \n", b[i]);
-    }
+    }*/
         
 }
 //Question 2/3
@@ -115,7 +115,7 @@ void facto_LU( double C[NX][NX] , double L[NX][NX] , double U[NX][NX]) {
         }
                 
     }
-    printf("\nmat L : \n\n");     //affichage de C
+    /*printf("\nmat L : \n\n");     //affichage de C
     for (int i=0; i<NX; i++){
         for (int j=0; j<NX; j++){
             printf(" %lf ", L[i][j]);
@@ -128,7 +128,7 @@ void facto_LU( double C[NX][NX] , double L[NX][NX] , double U[NX][NX]) {
                printf(" %lf ", U[i][j]);
            }
            printf("\n");
-       }
+       }*/
 }
 
 
@@ -147,9 +147,9 @@ void resol_trig_inf( double A[NX][NX] , double x[NX], double b[NX]) {
 
 void resol_trig_sup( double A[NX][NX] , double x[NX], double b[NX]) {
     int i;
-    float l;
+    double l;
     
-    for (i=NX;i>=0;i--) { //ici peut etre pb sur i=NX ou =NX-1
+    for (i=NX-1;i>=0;i--) { //ici peut etre pb sur i=NX ou =NX-1
         l=0;
         for (int k=i+1;k<NX;k++) l += A[i][k]*x[k];
         x[i] = (b[i]-l)/A[i][i];
@@ -157,14 +157,18 @@ void resol_trig_sup( double A[NX][NX] , double x[NX], double b[NX]) {
 }
 
 void solution_numeriqueIMPLI(double C[NX][NX], double c[NX], double dx, double dt, double Tinitiale, double Tfinale, int Tstop, double T[NX]){
-    double res=0.0;
     double vect[NX];
+    double y[NX];
     double L[NX][NX], U[NX][NX];
-    for (int i=1; i<NX-1; i++) T[i]=Tinitiale;
     T[0]=Tfinale;
     T[NX-1]=Tfinale;
+    for (int i=1; i<NX-1; i++) T[i]=Tinitiale;
     facto_LU(C, L, U);
-    
+    for (int n=0; n*dt<Tstop; n++){ //On applique ici la formule [C]T^n+1 = T^n + [c]
+        for (int i=0; i<NX; i++) vect[i]=T[i]+c[i];
+        resol_trig_inf(L, y, vect);
+        resol_trig_sup(U, T, y);
+    }
 }
 
 
@@ -177,7 +181,7 @@ int main(){
     double dtQ5 ;
     double errT = 1;                    // on choisit 1 ici, un choix qui nous semble cohérent avec l'ordre de grandeur des températures en jeu
     double normT=100;
-    double B[NX][NX], Bprime[NX][NX], BQ5[NX][NX], C[NX][NX], L[NX][NX], U[NX][NX];
+    double B[NX][NX], Bprime[NX][NX], BQ5[NX][NX], C[NX][NX];
     double b[NX], bprime[NX], bQ5[NX], c[NX];
     double Ti=750, Tf=25;               //Condition initiale et finale
     int ts;
@@ -217,7 +221,10 @@ int main(){
     Creation_Cc(C, c, dx, dtQ5, a);
     
     //Question 7
-    
-    
+    solution_numeriqueIMPLI(C, c, dx, dt, Ti, Tf, ts, T);
+    printf("vect T : \n\n");    //affichage de T à Ts
+    for (int i=0; i<NX; i++){
+        printf(" %lf \n", T[i]);
+    }
     
 }
