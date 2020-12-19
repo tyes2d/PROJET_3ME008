@@ -237,6 +237,7 @@ int main(){
     solution_numeriqueEXPLI(Bprime, bprime, dx, dtprime, Ti, Tf, ts, Tprime);
     printf("\nVecteur T avec le pas de temps initial divisé par 5 (méthode explicite):\n\n");    //affichage de T
     for (int i=0; i<NX; i++) printf(" %lf\n", Tprime[i]);
+    //Pour le tracé de la différence entre T et Tprime, on a directement utilisé Excel en utilisant les valeurs que nous donnait le programme
     
     //Question 5
     
