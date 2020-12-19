@@ -210,8 +210,8 @@ int main(){
     Creation_Bb(B, b, dx, dt, a);
     Evo_temporelle_Question3(B, b, dx, dt, Ti, Tf, T, evoT);
     
-    printf("Evolution temporelle de T au milieu de la plaque :\n");
-    for (int i=0; i<6400; i=i+10) printf("%lf\n", evoT[i]);
+    /*printf("Evolution temporelle de T au milieu de la plaque :\n");
+    for (int i=0; i<6400; i=i+10) printf("%lf\n", evoT[i]);*/           //Le printf de ce vecteur prend beaucoup de temps
     //Question 4
     Creation_Bb(Bprime, bprime, dx, dtprime, a);
    
