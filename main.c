@@ -59,14 +59,14 @@ void solution_numeriqueEXPLI(double B[NX][NX], double b[NX], double dx, double d
     }
 }
 void Evo_temporelle_Question3(double B[NX][NX], double b[NX], double dx, double dt, double Tinitiale, double Tfinale, double T[NX], double EvoTemporelleT[6400]){
-    //On utilise finalement quasiment la même fonction que 
+    //On utilise finalement quasiment la même fonction que 'solution_numeriqueEXPLI'
     double res=0.0;
     for (int i=0; i<NX; i++) T[i]=Tinitiale;
-    for (int n=0; n*dt<120; n++){
+    for (int n=0; n*dt<120; n++){   //on faire varier n de 0 à 6399 por remplir le tableau EvoTemporelleT[n]
         for (int i=0; i<NX;i++){
             res=0.0;
             for (int j=0; j<NX;j++) res += B[i][j]*T[j];
-            T[i] = res+b[i];
+            T[i] = res+b[i];        //à chaque itération (à t=n*dt) on préleve T[19] pour le mettre dans EvoTemporelleT[n]
         }
         EvoTemporelleT[n]=T[19];
     }
@@ -75,10 +75,10 @@ void Evo_temporelle_Question3(double B[NX][NX], double b[NX], double dx, double 
 
 //Question 6
 void Creation_Cc(double C[NX][NX], double c[NX], double dx, double dt, double a) {
-    c[0]=25*a*dt/(dx*dx);
+    c[0]=25*a*dt/(dx*dx);                   //ici T_0=25°C et T_L=25°C
     c[NX-1]=25*a*dt/(dx*dx);
-       for (int i=1; i<NX-1; i++) c[i]=0;
-       for (int i=0; i<NX; i++){           //on initialise B, on lui met une valeur par défaut de 0.0
+       for (int i=1; i<NX-1; i++) c[i]=0;   //On initialise c, on lui met une valeur par défaut de 0.0
+       for (int i=0; i<NX; i++){            //On initialise C, on lui met une valeur par défaut de 0.0
            for (int j=0; j<NX; j++){
                C[i][j]=0.0;
            }
@@ -102,7 +102,8 @@ void Creation_Cc(double C[NX][NX], double c[NX], double dx, double dt, double a)
 }
 //Question 7
 
-void facto_LU( double C[NX][NX] , double L[NX][NX] , double U[NX][NX]) {
+void facto_LU( double C[NX][NX] , double L[NX][NX] , double U[NX][NX]){
+    //On a récupéré la fonction de factorisation LU des TP de cette année.
     int i,j,k;
     float l;
     for (j=0;j<NX;j++) {
@@ -136,6 +137,7 @@ void facto_LU( double C[NX][NX] , double L[NX][NX] , double U[NX][NX]) {
 }
 
 void resol_trig_inf( double A[NX][NX] , double x[NX], double b[NX]) {
+    //On a récupéré la fonction de la resolution triangulaire inférieur des TP de cette année.
     int i;
     float l;
     
@@ -148,6 +150,7 @@ void resol_trig_inf( double A[NX][NX] , double x[NX], double b[NX]) {
 
 
 void resol_trig_sup( double A[NX][NX] , double x[NX], double b[NX]) {
+    //On a récupéré la fonction de la resolution triangulaire supérieur des TP de cette année.
     int i;
     double l;
     
@@ -160,7 +163,7 @@ void resol_trig_sup( double A[NX][NX] , double x[NX], double b[NX]) {
 
 void solution_numeriqueIMPLI(double C[NX][NX], double c[NX], double dx, double dt, double Tinitiale, double Tfinale, int Tstop, double T[NX]){
     double vect[NX];
-    double y[NX];
+    double y[NX];                       //Vecteur de résolution intermédiaire : LUx=b --> Ly=b --> Ux=y
     double L[NX][NX], U[NX][NX];
     for (int i=0; i<NX; i++) T[i]=Tinitiale;
     facto_LU(C, L, U);
@@ -183,7 +186,7 @@ int main(){
     double dtQ5, dtQ8 ;                     //Pas de temps pour la question 5 et la question 8
     double errT = 10;                       //On choisit 10 ici, une marge erreur qui nous semble correcte. Ca revient à une erreur moyenne sur x de 1.6°C
     double normT=100;                       //Variable stockant la norme du vecteur T (Température) à la question 5. On l'initialise suffisamment grand pour pouvoir lancer la boucle avec au moins une itération
-    double normTQ8[6];                     //Pour stocker la différence entre les normes de la solution explicite et implicite à chaques itérations à la question 8
+    double normTQ8[6];                      //Pour stocker la différence entre les normes de la solution explicite et implicite à chaques itérations à la question 8
     double B[NX][NX], Bprime[NX][NX], BQ5[NX][NX];//Différentes matrices B pour les question 1, 4 et 5
     double C[NX][NX], CQ8[NX][NX];          //Différentes matrices C pour les question 6 et 8
     double b[NX], bprime[NX], bQ5[NX];      //Différentes vecteur b pour les question 1, 4 et 5
@@ -192,7 +195,7 @@ int main(){
     int ts;                                 //Temps qui est saisi par l'utilisateur definissant quand on doit sortir la plaque de l'eau
     double T[NX], Tprime[NX], TQ5[NX], deltaT[NX], TQ8[NX];//Tous les vecteurs Températures qui vont nous etre utiles (respectivement) aux questions 1, 4, 5, 5 et 8
     for (int i=0; i<NX; i++) T[i]=0;        //
-    for(int i=0;i<6;i++) normTQ8[i]=0.0;   //on initialise T et normTQ8 pour eviter de se retrouver avec des valeurs ahurissantes plus tard
+    for(int i=0;i<6;i++) normTQ8[i]=0.0;    //on initialise T et normTQ8 pour eviter de se retrouver avec des valeurs ahurissantes plus tard
     
     //DEBUT DU MAIN
     printf("Au bout de combien de temps la plaque doit-elle etre retirée de l'eau (en seconde, uniquement nombre entier)? \n");
@@ -202,13 +205,11 @@ int main(){
     //Question 2
     solution_numeriqueEXPLI(B, b, dx, dt, Ti, Tf, ts, T);
     printf("vect T : \n\n");                         //affichage de T à Ts
-    for (int i=0; i<NX; i++) printf(" %lf\n", T[i]); //
+    for (int i=0; i<NX; i++) printf("%lf\n", T[i]);  //
     //Question 3
     Creation_Bb(B, b, dx, dt, a);
     Evo_temporelle_Question3(B, b, dx, dt, Ti, Tf, T, evoT);
-    printf("\nvect T : \n\n");
-    for (int i=0; i<NX; i++) printf("%lf\n", T[i]);
-
+    
     printf("Evolution temporelle de T au milieu de la plaque :\n");
     for (int i=0; i<6400; i=i+10) printf("%lf\n", evoT[i]);
     //Question 4
@@ -217,7 +218,7 @@ int main(){
     
     solution_numeriqueEXPLI(Bprime, bprime, dx, dtprime, Ti, Tf, ts, Tprime);
     printf("vect Tprime : \n\n");    //affichage de T à Ts
-    for (int i=0; i<NX; i++) printf(" %lf\n", Tprime[i]);
+    for (int i=0; i<NX; i++) printf("%lf\n", Tprime[i]);
     
     //Question 5
     
@@ -242,7 +243,7 @@ int main(){
     //Question 7
     solution_numeriqueIMPLI(C, c, dx, dtQ5, Ti, Tf, ts, T);
     printf("vect T : \n\n");    //affichage de T à Ts
-    for (int i=0; i<NX; i++) printf(" %lf\n", T[i]);
+    for (int i=0; i<NX; i++) printf("%lf\n", T[i]);
     
     //Question 8
     dtQ8=dtQ5;
