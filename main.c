@@ -26,8 +26,8 @@ void Creation_Bb(double B[NX][NX], double b[NX], double dx, double dt, double a)
     for (int i=0; i<NX; i++){
         for (int j=0; j<NX; j++){
             if (i==j) B[i][j] = 1-2*a*dt/(dx*dx);
-            else if (j==i+1 || j==i-1) B[i][j] = a*dt/(dx*dx);      //on cré les diagonales au dessus et en dessous de la diagonales principales
-            else if (j==NX-2 && i==NX-1) B[i][j] = 2*a*dt/(dx*dx);  //on cré notre diagonale de matrice B
+            else if (j==i+1 || j==i-1) B[i][j] = a*dt/(dx*dx);      //on crée les diagonales au dessus et en dessous de la diagonale principale
+            else if (j==NX-2 && i==NX-1) B[i][j] = 2*a*dt/(dx*dx);  //on crée notre diagonale de matrice B
             else B[i][j] = 0;                                       //le reste est à valeur 0
         }
     }
@@ -50,7 +50,7 @@ void solution_numeriqueEXPLI(double B[NX][NX], double b[NX], double dx, double d
     double res=0.0;
     int n;
     for (int i=0; i<NX; i++) T[i]=Tinitiale;
-    for (n=0; n*dt<Tstop; n++){                 // n=Tstop/dt : nombre d'échantillon temporels sur lesquels il faut trouver T jusqu'au temps Tstop
+    for (n=0; n*dt<Tstop; n++){                 // n=Tstop/dt : nombre d'échantillons temporels sur lesquels il faut trouver T jusqu'au temps Tstop
         for (int i=0; i<NX;i++){                //On applique ici la formule T^n+1 = [B]*T^n + [b]
             res=0.0;
             for (int j=0; j<NX;j++) res += B[i][j]*T[j];
@@ -174,10 +174,10 @@ void solution_numeriqueIMPLI(double C[NX][NX], double c[NX], double dx, double d
 
 int main(){
     int z=0;                                //Variable quelconque
-    double a=0.00001;                       //Diffusivité du materiaux
+    double a=0.00001;                       //Diffusivité du materiau
     double dx = 0.03/nx;                    //dx=L/nx=0.03/40
     double dt = 30/(nx*nx);                 //Pas de temps initial
-    double evoT[6400];                      //Vecteur stockant la valeurs de T au milieu de la plaque à chaque pas de temps. Une case par seconde (6400*dt = 120)
+    double evoT[6400];                      //Vecteur stockant la valeur de T au milieu de la plaque à chaque pas de temps. Une case par seconde (6400*dt = 120)
     double dtprime=30/(5*nx*nx);            //Pas de temps pour la fin de la question 4
     double dtQ5, dtQ8 ;                     //Pas de temps pour la question 5 et la question 8
     double errT = 10;                       //On choisit 10 ici, une marge erreur qui nous semble correcte. Ca revient à une erreur moyenne sur x de 1.6°C
@@ -191,13 +191,13 @@ int main(){
     int ts;                                 //Temps qui est saisi par l'utilisateur definissant quand on doit sortir la plaque de l'eau
     double T[NX], Tprime[NX], TQ5[NX], deltaT[NX], TQ8[NX];//Tous les vecteurs Températures qui vont nous etre utiles (respectivement) aux questions 1, 4, 5, 5 et 8
     for (int i=0; i<NX; i++) T[i]=0;        //
-    for(int i=0;i<10;i++) normTQ8[i]=0.0;   //on initialis T et normTQ8 pour eviter de se retrouver avec des valeurs ahurissantes plus tard
+    for(int i=0;i<10;i++) normTQ8[i]=0.0;   //on initialise T et normTQ8 pour eviter de se retrouver avec des valeurs ahurissantes plus tard
     
     //DEBUT DU MAIN
     printf("Au bout de combien de temps la plaque doit-elle etre retirée de l'eau (en seconde, uniquement nombre entier)? \n");
     scanf("%d", &ts);
     //Question 1
-    Creation_Bb(B, b, dx, dt, a);           //On cré B et b
+    Creation_Bb(B, b, dx, dt, a);           //On crée B et b
     //Question 2
     solution_numeriqueEXPLI(B, b, dx, dt, Ti, Tf, ts, T);
     printf("vect T : \n\n");                         //affichage de T à Ts
