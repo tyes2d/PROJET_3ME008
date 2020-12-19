@@ -213,24 +213,29 @@ int main(){
     printf("Au bout de combien de temps la plaque doit-elle etre retirée de l'eau (en seconde, uniquement nombre entier)?\n");
     scanf("%d", &ts);
     printf("\n------DEBUT DE LA PARTIE 1------\n\n");
+
     //Question 1
-    Creation_Bb(B, b, dx, dt, a);                                           //On crée B et b
+    
+    Creation_Bb(B, b, dx, dt, a);                                                         //On crée B et b
+
     //Question 2
+
     solution_numeriqueEXPLI(B, b, dx, dt, Ti, Tf, ts, T);
-    printf("\nVecteur T (méthode explicite):\n\n");                         //affichage de T à Ts
+    printf("\nVecteur T obtenu avec le pas de temps initial (méthode explicite):\n\n");   //affichage de T
     for (int i=0; i<NX; i++) printf(" %lf\n", T[i]); 
+
     //Question 3
+
     Creation_Bb(B, b, dx, dt, a);
     Evo_temporelle_Question3(B, b, dx, dt, Ti, Tf, T, evoT);
-
     /*printf("\nEvolution temporelle de T au milieu de la plaque :\n\n");                //DECOMMENTER CES DEUX LIGNES POUR L'EVOLUTION TEMPORELLE DE T AU MILIEU DE LA PLAQUE
     for (int i=0; i<6400; i=i+10) printf("%lf\n", evoT[i]);*/
 
     //Question 4
 
-    Creation_Bb(Bprime, bprime, dx, dtprime, a);
+    Creation_Bb(Bprime, bprime, dx, dtprime, a);                                         //On crée B et b pour le pas de temps divisé par 5
     solution_numeriqueEXPLI(Bprime, bprime, dx, dtprime, Ti, Tf, ts, Tprime);
-    printf("\nVecteur T avec un pas de temps divisé par 5 (méthode explicite):\n\n");    //affichage de T à Ts
+    printf("\nVecteur T avec le pas de temps initial divisé par 5 (méthode explicite):\n\n");    //affichage de T
     for (int i=0; i<NX; i++) printf(" %lf\n", Tprime[i]);
     
     //Question 5
@@ -261,7 +266,7 @@ int main(){
     //Question 7
 
     solution_numeriqueIMPLI(C, c, dx, dtQ5, Ti, Tf, ts, T);
-    printf("Vecteur T question 7 (méthode implicite) :\n\n");    //affichage de T à Ts
+    printf("Vecteur T question 7 (méthode implicite) :\n\n");    //affichage de T
     for (int i=0; i<NX; i++) printf(" %lf\n", T[i]);
     
     //Question 8
